@@ -1,0 +1,785 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <windows.h>
+#include<conio.h>
+#include<time.h>
+#include "control.h"
+#include "hieuung.h"
+#define MAX 100
+#define consoleWidth 855
+#define consoleHeight 30
+
+enum TrangThai{UP, DOWN};
+struct DeThi
+{
+	char tieuDe[100];
+	char cauHoi[100];
+	char dapAnA[100];
+	char dapAnB[100];
+	char dapAnC[100];
+	char dapAnD[100];
+};
+typedef struct	
+{
+	char hoTen[300];
+	char tuoi[300];
+	char mssv[300];
+	char acc[300];
+	char pass[300];
+	char diem[300];
+}thongTin;
+struct DapAnDeThi
+{
+	int dapAn;
+};
+DeThi de1[MAX];
+char chu[10] = "color 09";
+tagTIME t;
+char tK[20];
+//================================NGUYEN MAU HAM===============================
+void menuMain();
+int DocFileDeThiTextVaoMang(char* filename, DeThi a[], int &n);
+int GhiMangVaoFileText(char* filename, DeThi a[], int n);
+int DocFileDapAnVaoMang(char* filename, DapAnDeThi a[], int &n);
+void showMainMenu(thongTin e[], int n);
+void showTestMenu();
+void xuatDanhSachVaThucThi(DeThi a[], DapAnDeThi de[], int n, char* dapande, char* bode, char* account);
+void KetQuaThi(int socau,int n, int x, int a[], DapAnDeThi b[]);
+void xuat(thongTin arr[],int n);
+//Dang nhap dang ky
+int DangNhap(thongTin a[],int &n);
+int DangKy(thongTin a,thongTin arr[] ,int n);
+int GhiThongTinDangKy(char* filename,thongTin a);
+int DocFileDangKy(char* filename, thongTin a[], int &n);
+//Them
+int GhiThongTinDeThi(char* filename,DeThi a);
+int themCauHoi(DeThi arr[], DeThi a, int n);
+//About
+void About();
+void Title();
+void ThongTinTK();
+//XEP HANG
+int GhiThongTinXepHang(char* filename,char *account,float diem);
+int GhiThongTinXepHang_Char(char* filename,char *account,char *diem);
+int DocFileXepHang(char* filename, thongTin a[], int &n);
+void Swap(char *a, char* b);
+void xepThuHang(char* filename,thongTin a[], int &n);
+int GhiFileTrang(char* filename);
+void xoaPhanTuTrung(thongTin arr[],int &n,int viTri);
+void lichSuThi(thongTin arr[] , int &n);
+
+//===============================MAIN CHINH=====================================
+int main(int argc, char *argv[])
+{
+	int chon;
+	thongTin a[100],b, e[100];
+	DeThi de;
+	int n, chon1, chon2, j,o;
+	DapAnDeThi dapande1[MAX];
+	HANDLE thr;
+	HANDLE hConsole =GetStdHandle( STD_OUTPUT_HANDLE);
+	DWORD param;
+	t.k = 3600;
+	SetConsoleTitle("Chuong trinh trac nghiem tieng anh lop 12"); //Dat ten tieu de chuong trinh
+	CreateThread(NULL, 0, ThreadProc2, NULL, 0, NULL);
+			 LoadScreen();
+ 			do{
+			thr = CreateThread(NULL, 0, ThreadProc, NULL, 0, NULL);// tao them 1 luong
+			menuMain();
+			chon1 = LuaChon(16, 21, 44);
+			switch(chon1){
+				case 1:
+			//	CloseHandle(thr);
+			CaiDatMau(chu);
+					system("cls");
+					TerminateThread(thr, param);
+					j = DangNhap(a, n);
+					if(j!=-1)//Dang nhap
+					{
+						// Menu Chon 
+						do{
+							CaiDatMau(chu);
+							showMainMenu(e, n);
+							chon2 = LuaChon(13, 18, 49);
+							switch(chon2)
+							{
+								case 1:
+									//Menu chon de
+										showTestMenu();
+										fflush(stdin);
+										chon = LuaChonDe(1, 6, 40);
+										switch(chon)
+										{
+											case 1:
+												system("cls");
+												DiemNguoc(3, "Bat dau thi sau");
+												printf("Bo de 1\n");
+												xuatDanhSachVaThucThi(de1, dapande1, n, "dethivadapan/dapande1.txt", "dethivadapan/bode1.txt", a[j].acc);
+												break;
+											case 2:
+												system("cls");
+												DiemNguoc(3, "Bat dau thi sau");
+												printf("Bo de 2\n");
+												xuatDanhSachVaThucThi(de1, dapande1, n,"dethivadapan/dapande2.txt",  "dethivadapan/bode2.txt", a[j].acc);
+												break;
+											case 3:
+												system("cls");
+												DiemNguoc(3, "Bat dau thi sau");
+												printf("Bo de 3\n");
+												xuatDanhSachVaThucThi(de1, dapande1, n,"dethivadapan/dapande3.txt",  "dethivadapan/bode3.txt", a[j].acc);
+												break;
+											case 4:
+												system("cls");
+												DiemNguoc(3, "Bat dau thi sau");
+												printf("Bo de 4\n");
+												xuatDanhSachVaThucThi(de1, dapande1, n,"dethivadapan/dapande4.txt",  "dethivadapan/bode4.txt", a[j].acc);
+												break;
+											case 5:
+												system("cls");
+												DiemNguoc(3, "Bat dau thi sau");
+												printf("Bo de 5\n");
+												xuatDanhSachVaThucThi(de1, dapande1, n,"dethivadapan/dapande5.txt",  "dethivadapan/bode5.txt", a[j].acc);
+												break;
+											case 6:
+												system("cls");
+												DiemNguoc(3, "Bat dau thi sau");
+												printf("Bo de 6\n");
+												xuatDanhSachVaThucThi(de1, dapande1, n,"dethivadapan/dapande6.txt",  "dethivadapan/bode6.txt", a[j].acc);
+												break;
+											case 0:
+												system("cls");
+												break;
+											default:
+												//MessageBox(NULL, "Ban nhap sai! Vui long nhap lai!", "Error", MB_OK);//HIen thi hop thoai thong bao loi
+												system("cls");
+											break;
+										}
+									break;
+								case 2:
+										system("cls");
+										gotoxy(2, 1);
+										printf("1. Thay doi mau nen + text\n");
+										gotoxy(2, 2);
+										printf("2. Thay doi thoi gian\n");
+										gotoxy(2, 3);	
+										printf("3. Quay lai\n");
+										char esc;
+										if(kbhit())//phat hien co phim nhan
+										{
+											esc = getch();
+										}
+										if(esc==27)
+											break;
+										chon = LuaChon(0, 8, 0);
+										switch(chon)
+										{
+											case 1:
+												system("cls");
+												BangMau();
+												SetConsoleTextAttribute(hConsole, 1);
+												printf("\nChon so tuong ung nhu mau o bang tren voi cu phap sau: color 02 \n");
+												printf("0 la mau nen (Den)\n");
+												printf("2 la mau chu (Xanh)\n ");
+												printf("Hoac chi doi mau chu: color 1\n");
+												printf("Nhap cu phap: ");
+												fflush(stdin);
+												gets(chu);
+												CaiDatMau(chu);
+												system("cls");
+												break;
+											case 2:
+												system("cls");
+												printf("Nhap gio: ");
+												scanf("%d", &t.h);
+												printf("Nhap phut: ");
+												scanf("%d", &t.m);
+												printf("Nhap giay: ");
+												scanf("%d", &t.s);
+											 	t.k = t.h*60*60+t.m*60+t.s;
+											 	printf("Thay doi thanh cong\n");
+											 	system("pause");
+											 	system("cls");
+												break;
+											case 3:
+											system("cls");
+												break; 
+										}
+										break;
+								case 3:
+										system("cls");
+										printf("\n>>>Danh Sach Thu Hang Account<<<");
+										xepThuHang("XepHang.txt", a, n);
+										gotoxy(0, 28);
+										system("pause");
+										system("cls");
+										break;
+								case 4:
+										break;
+								default:
+										//MessageBox(NULL, "Ban nhap sai! Vui long nhap lai!", "Error", MB_OK);//HIen thi hop thoai thong bao loi
+										system("cls");
+								break;
+							}
+						}while(chon2!=4);
+					}
+					break;
+				case 2:
+				//CloseHandle(thr);
+					system("cls");
+					TerminateThread(thr, param); 
+					if(DangKy(b,a,n)==1){
+						printf("\nDang ky thanh cong\n");
+						system("pause");
+						break;
+					} if(DangKy(b,a,n)==-1){
+						SetConsoleTextAttribute(hConsole, 2);
+						printf("\nKhong duoc nhap khoang trang");
+						system("cls");
+					}
+					else
+						SetConsoleTextAttribute(hConsole, 2);
+						printf("\n>>> Ten tai khoan da ton tai hoac ban da nhap khoan trang vui long dang ky lai <<<\n\n");
+						system("pause");
+					break;
+				case 3:
+					TerminateThread(thr, param);
+					About();
+					break;
+				case 4:
+					SetConsoleTextAttribute(hConsole, 9);
+					gotoxy(0, 28);
+					printf("\nHen gap lai!\a\n");
+					break;
+			}
+		}while(chon1!=4);
+	return 0;
+}
+//==============================VIET HAM========================================
+// Menu va giao dien-----------------------------------------
+void Title()
+{
+			gotoxy(20, 1);
+			printf(" _____  _   _ _   _ _____ _   _ _____   ___________ _____ _   _  _   _ ");
+			gotoxy(20, 2);
+			printf("/  __ \\| | | | | | |  _  | \\ | |  __ \\ |_   _| ___ \\_   _| \\ | || | | |");
+			gotoxy(20, 3);
+			printf("| /  \\/| |_| | | | | | | |  \\| | |  \\/   | | | |_/ / | | |  \\| || |_| |");
+			gotoxy(20, 4);
+			printf("| |    |  _  | | | | | | | . ` | | __    | | |    /  | | | . ` ||  _  |");
+			gotoxy(20, 5);
+			printf("| \\__/\\| | | | |_| \\ \\_/ / |\\  | |_\\ \\   | | | |\\ \\ _| |_| |\\  || | | |");
+			gotoxy(20, 6);
+			printf("\\____/\\_|  |_/\\___/ \\___/\\_| \\_/\\____/   \\_/ \\_| \\_|\\___/\\_| \\_/ \\_||_/");
+			gotoxy(20, 9);
+			printf(" ___________  ___  _____   _   _ _____  _   _ _____ ________  ___");
+			gotoxy(20, 10);
+			printf("|_   _| ___ \\/ _ \\/  __ \\ | \\ | |  __ \\| | | |_   _|  ___|  \\/  |");
+			gotoxy(20, 11);
+			printf("  | | | |_/ / /_\\ \\ /  \\/ |  \\| | |  \\/| |_| | | | | |__ | .  . |");
+			gotoxy(20, 12);
+			printf("  | | |    /|  _  | |     | . ` | | __ |  _  | | | |  __|| |\\/| |");
+			gotoxy(20, 13);
+			printf("  | | | |\\ \\| | | | \\__/\\ | |\\  | |_\\ \\| | | |_| |_| |___| |  | |");
+			gotoxy(20, 14);
+			printf("  \\_/ \\_| \\_\\_| |_/\\____/ \\_| \\_/\\____/\\_| |_/\\___/\\____/\\_|  |_/");
+}
+void menuMain()
+{
+	
+			CaiDatMau(chu);
+			system("cls");
+			Title();
+			veKhung(15, 95, 0, 24, 254);
+			gotoxy(46, 17);//Set vi tri	
+			printf("1 .Dang nhap");
+			gotoxy(46, 18);
+			printf("2 .Dang ky");
+			gotoxy(46, 19);
+			printf("3. About\n");
+			gotoxy(46, 20);
+			printf("4. Thoat");
+			gotoxy(46, 21);
+}
+void showMainMenu(thongTin e[], int n)
+{
+		ThongTinTK();
+		veKhung(48, 77, 13, 19, 219);
+		gotoxy(1,0);
+		printf("\n>>>Nhung nguoi vua moi thi<<<");
+		lichSuThi(e, n);
+		gotoxy(41, 12);
+		printf("^^^Chuong trinh luyen thi anh van lop 12^^^\n");
+		Sleep(1000);
+		gotoxy(51, 14);
+		printf("1. Bat dau thi\n");
+		Sleep(500);
+		gotoxy(51, 15);
+		printf("2. Cai dat\n");
+		Sleep(500);
+		gotoxy(51, 16);
+		printf("3. Bang Xep Hang\n");
+		Sleep(500);
+		gotoxy(51, 17);
+		printf("4. Quay lai\n");
+		Sleep(500);
+}
+void showTestMenu()
+{
+	system("cls");
+	gotoxy(42, 1);
+	printf("****** Bo de thi trac nghiem ******\n");
+	gotoxy(42, 2);
+	printf("1. De 1\t\t\t2.De 2\n");
+	gotoxy(42, 3);
+	printf("3. De 3\t\t\t4.De 4\n");
+	gotoxy(42, 4);
+	printf("5. De 5\t\t\t6.De 6\n");
+	gotoxy(42, 5);
+	printf("0. Quay lai\n");
+}
+//Xu ly thi trac nghiem-----------------------------------------
+void xuatDanhSachVaThucThi(DeThi a[], DapAnDeThi de[], int n, char* dapande, char* bode, char* account)
+{	
+	int  chon5[40]; 
+	int tongdiem=0, dem = 0;
+	HANDLE thr;
+	 DWORD param;
+	 t.x=98;
+		DocFileDeThiTextVaoMang(bode, a, n);
+		DocFileDapAnVaoMang(dapande, de, n);
+		thr= CreateThread(NULL, 0, ThreadProc1, &t, 0, NULL);
+		
+    	for(int i = 0; i<n; i++)
+        {
+			do
+			{
+				veKhung(45, 75, 20, 25, 219);
+				CaiDatMau(chu);
+				gotoxy(2, 1);
+				printf("%s\n", a[i].tieuDe);
+				gotoxy(2, 3);
+				printf("%s\n", a[i].cauHoi);
+				gotoxy(2, 4);
+				printf("%s\n", a[i].dapAnA);
+				gotoxy(2, 5);
+				printf("%s\n", a[i].dapAnB);
+				gotoxy(2, 6);
+				printf("%s\n", a[i].dapAnC);
+				gotoxy(2, 7);
+				printf("%s\n", a[i].dapAnD);
+				gotoxy(2, 8);
+				printf("Dung\n");
+				if(WaitForSingleObject(thr, 1)==0)//Hang cho het thg gian thi dung
+				{
+					gotoxy(2, 10);
+					printf("Het thoi gian\n");
+					goto THOAT;
+				}
+				chon5[i] = LuaChon(3, 9, 0);
+				if(chon5[i]==de[i].dapAn) // tim xem ki tu "chon" co ton tai trong chuoi de[i].dapan hay ko?
+					tongdiem++;
+					dem++;
+				if(chon5[i]==5)
+					goto THOAT;
+				gotoxy(2, 9);
+				system("pause");
+				system("cls");
+			}while(chon5[i]!=5 && chon5[i]!=1 && chon5[i]!=2 && chon5[i]!=3 && chon5[i]!=4);
+        }
+        THOAT:;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+        KetQuaThi(tongdiem, n, dem, chon5, de);
+        GhiThongTinXepHang("XepHang.txt", account, tongdiem*(10/30.0));
+       	TerminateThread(thr, param); // tat thread 
+		system("pause");
+		system("cls");
+}
+
+
+int DocFileDeThiTextVaoMang(char* filename, DeThi a[], int &n)
+{
+	FILE* f = fopen(filename, "r");
+	if(!f)
+		return 0;
+	int i= 0;
+	while(!feof(f))
+	{
+		fgets(a[i].tieuDe, 1000, f);
+		fgets(a[i].cauHoi, 1000, f);
+		fgets(a[i].dapAnA, 1000, f);
+		fgets(a[i].dapAnB, 1000, f);
+		fgets(a[i].dapAnC, 1000, f);
+		fgets(a[i].dapAnD, 1000, f);
+		i++;
+	}
+	n=i;
+}
+int DocFileDapAnVaoMang(char* filename, DapAnDeThi a[], int &n)
+{
+	FILE* f = fopen(filename, "r");
+	if(!f)
+		return 0;
+	int i= 0;
+	while(!feof(f))
+	{
+		fscanf(f, "%d", &a[i].dapAn);
+		i++;
+	}
+	n=i;
+}
+
+//Dang nhap va dang ki-----------------------------------------
+int DangNhap(thongTin a[],int &n)
+{	
+	char acc[20], pass[20];
+	char ch;
+	int dem=0,mark=0;
+	veKhung(39, 69, 9, 15, 219);
+	DocFileDangKy("Dangky.txt",a,n);
+		gotoxy(50, 10);//Set vi tri	
+		printf("Dang Nhap\n");
+		gotoxy(40, 11);//Set vi tri	
+		printf("Tai khoan\n");
+		gotoxy(40, 12);//Set vi tri	
+		scanf("%s", &acc);
+		gotoxy(40, 13);
+		printf("Nhap mat khau\n");
+		gotoxy(40, 14);
+		while((ch=getch())!='\r') //Chi dung lai khi xuong dong (\r = 'ENTER' khac voi \n, \n la sang dong moi)
+		{
+			if((ch>='a'&&ch<='z')||(ch>='A'&&ch<='Z')||(ch>='0'&&ch<='9')){
+					printf("*");
+					pass[dem++]=ch;
+			}
+		 	else if (ch == -32) //bo qua phím mui tên + space
+	            _getch();
+ 	 		else if(ch=='\b')// backspace de xoa ki tu, \b la dung de lui ve vi tri trai 1 o
+	 		{
+		 		printf("\b \b");//\b nghia la lui con tro ve ben tra 1 ki tu
+		 		dem--;
+		 	}
+		}
+		strcpy(tK, acc);
+		pass[dem]='\0'; // ket thuc chuoi
+		for(int i = 0 ; i<n;i++){
+			if(strcmp(acc,a[i].acc)==0 && strcmp(pass,a[i].pass)==0)
+			{
+				printf("\nDang nhap thanh cong\n");
+				system("pause");
+				system("cls");
+				mark=1;
+				return i;
+			}
+		}
+		if(mark==0)
+		{
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+			printf("\nSai tai khoan hoac mat khau\n");
+			system("pause");
+			return -1;
+		}
+}
+int DocFileDangKy(char* filename, thongTin a[], int &n)
+{
+	FILE* f = fopen(filename, "r");
+	if(!f)
+		return 0;
+	int i= 0;
+	while(!feof(f))
+	{	
+		fscanf(f, "%s", &a[i].hoTen);
+		fscanf(f, "%s", &a[i].mssv);
+		fscanf(f, "%s", &a[i].tuoi);
+		fscanf(f, "%s", &a[i].acc);
+		fscanf(f, "%s", &a[i].pass);
+		i++;
+	}
+	n=i;
+}
+int GhiThongTinDangKy(char* filename,thongTin a)
+{
+	FILE* f = fopen(filename, "a");
+	if(!f) return 0;
+		fprintf(f, "%s", "");
+		fprintf(f, "%s\n", a.hoTen);
+		fprintf(f, "%s\n", a.mssv);	
+		fprintf(f, "%s\n", a.tuoi);
+		fprintf(f, "%s\n", a.acc);
+		fprintf(f, "%s\n", a.pass);	
+	fclose(f);
+	return 1;
+}
+int DangKy(thongTin a,thongTin arr[],int n)
+{	
+	DocFileDangKy("Dangky.txt",arr,n);
+	printf("\n------Tao Tai Khoan------\n");
+	printf("\n*Luu y*>> Khong nhap khoan trang (space) \n");
+	printf("\nTen : ");
+	fflush(stdin);
+	gets(a.hoTen);
+	if(strstr(a.hoTen," ")) 
+			return -1;
+	printf("Mssv : ");
+	fflush(stdin);
+	gets(a.mssv);
+	printf("Tuoi : ");
+	fflush(stdin);
+	gets(a.tuoi);
+	printf("Tai Khoan : ");
+	fflush(stdin);
+	gets(a.acc);
+	if(strstr(a.acc," "))
+			return 0;
+	for(int i=0 ; i<n ;i++){
+		if(strcmp(arr[i].acc,a.acc)==0) {
+			return 0;
+		}
+	}
+	printf("Mat Khau : ");
+	fflush(stdin);
+	gets(a.pass);
+	GhiThongTinDangKy("Dangky.txt",a);
+	return 1;
+}
+//Ket qua thi-----------------------------------------
+
+void KetQuaThi(int socau, int n, int x, int a[], DapAnDeThi b[])
+{
+	float diem = socau*(10/30.0);
+	printf("Tong so cau ban lam duoc la: %d/30\n", socau);
+	printf("Diem: %.2f	\n", diem);
+	printf("Dap an\n");
+	for(int i=0; i<n; i++)
+	{
+		if(b[i].dapAn==1)
+			printf("%d. A\t", i+1);
+		if(b[i].dapAn==2)
+			printf("%d. B\t", i+1);
+		if(b[i].dapAn==3)
+			printf("%d. C\t", i+1);
+		if(b[i].dapAn==4)
+			printf("%d. D\t", i+1);
+	}
+	printf("\nDap an cua ban\n");
+	for(int i=0; i<x; i++)
+	{
+		if(a[i]==1)
+			printf("%d. A\t", i+1);
+		if(a[i]==2)
+			printf("%d. B\t", i+1);
+		if(a[i]==3)
+			printf("%d. C\t", i+1);//con file dapan3456 chua sua
+		if(a[i]==4)
+			printf("%d. D\t", i+1);
+	}
+	printf("\n");
+}
+// BANG XEP HANG-----------------------------------------
+int DocFileXepHang(char* filename, thongTin a[], int &n)
+{
+	FILE* f = fopen(filename, "r");
+	if(!f)
+		return 0;
+	int i= 0;
+	while(!feof(f))
+	{	
+		fscanf(f, "%s", &a[i].acc);
+		fscanf(f, "%s", &a[i].diem);
+		i++;
+	}
+	n=i;
+}
+void Swap(thongTin a, thongTin b)
+{
+	thongTin temp = a;
+	a=b;
+	b=temp;
+}
+void xepThuHang(char* filename,thongTin a[], int &n)
+{
+	int k;
+	thongTin temp;
+	thongTin b[100];
+	GhiFileTrang("XepHangTrue.txt");
+	DocFileXepHang("XepHang.txt",a,n); // 3 4 5
+
+	for(int i = 0; i < n ; i ++){
+		for(int j = i+1 ; j<n;j++){	
+			if(strcmp(a[i].diem,a[j].diem)<0){
+				temp = a[i];
+				a[i] = a[j];
+				a[j] = temp;
+			}  
+		}
+	}
+	gotoxy(1, 1);
+	printf("%-5s%-13s%-10s","Top","Account","Diem");
+	for(int i = 0; i <n ; i ++){
+		GhiThongTinXepHang_Char("XepHangTrue.txt",a[i].acc,a[i].diem);
+	}
+	DocFileXepHang("XepHangTrue.txt",b,n);
+	for(int i = 0; i < n ; i ++){
+		for(int j = i+1 ; j<n;j++){	
+			if(strcmp(b[i].acc,b[j].acc)==0){
+				xoaPhanTuTrung(b,n,j);
+				j--;
+			}  
+		}
+	}
+	veKhung(0, 33, 0, 20, 219);
+	for(int i = 0; i <n ; i++){
+		gotoxy(2, i+2);
+		printf("%-5d%-13s%-10s",i+1,b[i].acc,b[i].diem);
+		if(n>10)
+			n=10;
+	}
+}
+void lichSuThi(thongTin arr[] , int &n){
+	DocFileXepHang("XepHang.txt",arr,n);
+	veKhung(0, 31, 0, 23, 219);
+	gotoxy(2, 2);
+	printf("%-10s%-10s%-4s","NewText","Account", "Diem");
+	int k =2, l=0;
+	while(n>23)
+	{
+		l++;
+		// Gioi han chi 20 phan tu
+		if(n<(23+l))
+			break;
+	}
+	for(int i = n-2; i > l  ; i--){
+		gotoxy(2, k+1);
+		printf("%-10d%-10s%-4s",n-i-1,arr[i].acc,arr[i].diem);
+		k++;
+	}		
+}
+void xoaPhanTuTrung(thongTin arr[] , int &n, int viTri){
+	for(int i = viTri ; i<n ; i++){
+		arr[i] = arr[i+1];
+	}
+	n--;
+}
+int GhiFileTrang(char* filename)
+{	
+	FILE* f = fopen(filename, "w");
+	if(!f) return 0;
+		fprintf(f, "%s", "");
+	fclose(f);
+	return 1;
+}
+int GhiThongTinXepHang(char* filename,char *account,float diem)
+{	
+	FILE* f = fopen(filename, "a");
+	if(!f) return 0;
+		fprintf(f, "%s", "");
+		fprintf(f, "%s\n", account);
+		fprintf(f, "%.2f\n", diem);
+	fclose(f);
+	return 1;
+}
+int GhiThongTinXepHang_Char(char* filename,char *account,char *diem)
+{	
+	FILE* f = fopen(filename, "a");
+	if(!f) return 0;
+		fprintf(f, "%s", "");
+		fprintf(f, "%s\n", account);
+		fprintf(f, "%s\n", diem);
+	fclose(f);
+	return 1;
+}
+//Thong Tin-----------------------------------------
+void About()
+{
+	TrangThai tt;
+	int y=0, x = 42, t;
+	tt=DOWN;
+	char c;
+	system("cls");
+	while(1)
+	{
+		if(kbhit())//phat hien co phim nhan
+		{
+			c = getch();
+		}
+		if(c==27)
+			break;
+		system("cls");
+		gotoxy(x, y);
+		printf("GIOI THIEU\n");
+		gotoxy(x, y+2);
+		printf("Nhom 5");
+		gotoxy(x, y+4);
+		printf("Dang Le Minh Truong - 17019711");
+		gotoxy(x, y+6);
+		printf("Le Thanh Tung");
+		gotoxy(x, y+8);
+		printf("Nhan Vi Nam");
+		gotoxy(x, y+10);
+		printf("Project: Chuong Trinh Trac Nghiem Tieng Anh");
+		gotoxy(x, y+12);
+		printf("Ngay hoan thanh: 24/10/2018");
+		gotoxy(x, y+14);
+		printf("Version: 1.0");
+		gotoxy(0,0);
+		printf("ESC");
+		//XU ly cham bien
+		if(y>=15)
+			tt=UP;
+		else if(y==0) 
+			tt=DOWN;
+		//Di chuyen
+		if(tt==DOWN)
+			y++;
+		else if(tt==UP)
+			y--;
+		Sleep(300);
+	}
+}                          
+void ThongTinTK()
+{
+	thongTin a[MAX], tt[MAX];
+	char temp[300];
+	int n, k;
+	veKhung(89, 117, 0, 9, 219);
+	DocFileDangKy("DangKy.txt", a, n);
+	for(int i = 0;i<n;i++)
+	{
+		if(strcmp(tK, a[i].acc)==0)
+		{
+			gotoxy(95, 1);
+			printf("THONG TIN TAI KHOAN");
+			gotoxy(93, 2);
+			printf("Ten TK: %s", a[i].acc);
+			gotoxy(93, 3);
+			printf("Ten: %s", a[i].hoTen);
+			gotoxy(93, 4);
+			printf("MSSV: %s", a[i].mssv);
+			gotoxy(93, 5);
+			printf("Tuoi: %s", a[i].tuoi);
+		}
+	}
+		DocFileXepHang("XepHang.txt", tt, n);
+		strcpy(temp, tt[0].diem);
+		int flag = 0;
+		for(int i=0; i<n;i++)
+		{
+			if(strcmp(tK, tt[i].acc)==0)
+			{
+				flag = 1;
+				if(strcmp(tt[i].diem,temp)>0)
+					strcpy(temp,tt[i].diem);
+			}
+		}
+		if(flag==0)
+		{
+			strcpy(temp, "Chua thi");
+		}
+		gotoxy(93, 6);
+		printf("Diem cao nhat: %s", temp);
+}
+void HuongDan()
+{
+	printf("1. Thoi gian thi: 60p (Co the cai dat o muc Cai Dat)");
+	printf("");
+}

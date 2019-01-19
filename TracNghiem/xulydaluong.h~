@@ -1,0 +1,206 @@
+#include <stdio.h>
+#include <time.h>
+#include <conio.h>
+#include <windows.h>
+#include <string>
+#include <iostream>
+using namespace std;
+
+#define KB_UP 72
+#define KB_DOWN 80
+#define KB_LEFT 75
+#define KB_RIGHT 77
+#define KB_ESCAPE 27
+#define KB_F8 66
+#define KB_ENTER 13
+
+unsigned int x_hours=0;
+unsigned int x_minutes=0;
+unsigned int x_seconds=0;
+unsigned int x_milliseconds=0;
+unsigned int totaltime=0,count_down_time_in_secs=0,time_left=0;
+clock_t x_startTime,x_countTime;
+int KeyBoard_code,input_count=0;
+int caret_x=0,caret_y=0;
+char keyboard_buffer[100]={' '};
+char answer_buffer[100]={' '};
+char correct_answer[ ]="foo bar";
+
+int is_from_keyboard(int ch);
+void  start_timer();
+void  delta_time_update_timer();
+void gotoxy(int x, int y);
+void clrscr(void);
+void setcolor(WORD color); 
+void keyboard_input();
+
+int main ()
+{
+
+    count_down_time_in_secs= 4;  // 1 minute is 60sec (60x1min), 1 hour is 3600 (60x60min)
+
+    start_timer();
+    delta_time_update_timer();
+
+    gotoxy(1 , 2);  
+    printf( "\nWhat is the answer to the  bla bla of bla bla?  ");
+    gotoxy(1,5);printf( "Answer? >");
+
+
+    while (time_left>0) 
+    {
+        keyboard_input();
+        delta_time_update_timer();
+    }
+
+    gotoxy(1 , 12);
+    printf( "\n\n\nTime's out\n\n\n");
+
+return 0;
+}
+
+
+
+void  start_timer()
+{
+    x_startTime=clock();  // start clock
+}
+
+void  delta_time_update_timer()
+{
+    x_countTime=clock(); // update timer difference
+    x_milliseconds=x_countTime-x_startTime;
+    x_seconds=(x_milliseconds/(CLOCKS_PER_SEC))-(x_minutes*60);
+    x_minutes=(x_milliseconds/(CLOCKS_PER_SEC))/60;
+    x_hours=x_minutes/60;
+    time_left=count_down_time_in_secs-x_seconds;   // update timer
+
+
+        gotoxy(1 , 1);
+        printf( "\nYou have %d seconds left  ",time_left,count_down_time_in_secs);
+        gotoxy(1,5);
+
+}
+
+
+void keyboard_input()
+{
+    if (kbhit())
+      {
+            KeyBoard_code = getch();
+
+            caret_x++;
+            gotoxy(10+caret_x,5+caret_y);
+            printf( "%c",KeyBoard_code);
+            input_count++;
+            keyboard_buffer[input_count]=(char)KeyBoard_code;
+
+
+            switch (KeyBoard_code)
+            {
+
+                case KB_ESCAPE:
+
+
+                break;
+
+                case KB_ENTER:
+
+                    memcpy(answer_buffer, keyboard_buffer,sizeof(keyboard_buffer));
+
+                    gotoxy(1 ,7);
+                    printf( "Your answer is  %s ",answer_buffer);   
+
+
+                    gotoxy(1,5);printf( "Answer? >              ");
+                    gotoxy(1 ,9);
+                    printf( "The correct answer is %s ", correct_answer);
+                    caret_x=0;
+                    input_count=0;
+                    start_timer();
+                    count_down_time_in_secs= 7;
+                    delta_time_update_timer();
+                    memset(keyboard_buffer,32,sizeof(keyboard_buffer));
+                    memset(answer_buffer,32,sizeof(answer_buffer));
+
+                break;
+
+                case KB_LEFT:
+
+                break;
+
+
+
+                case KB_RIGHT:
+
+                  break;
+
+                case KB_UP:
+
+                break;
+
+                case KB_DOWN:
+
+                break;
+
+            }        
+
+      }
+
+}
+
+
+void setcolor(WORD color)
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),color);
+    return;
+}
+
+
+void gotoxy(int x, int y)
+{
+  static HANDLE hStdout = NULL;
+  COORD coord;
+
+  coord.X = x;
+  coord.Y = y;
+
+  if(!hStdout)
+  {
+    hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+  }
+
+  SetConsoleCursorPosition(hStdout,coord);
+}
+
+
+void clrscr(void)
+{
+  static HANDLE hStdout = NULL;      
+  static CONSOLE_SCREEN_BUFFER_INFO csbi;
+  const COORD startCoords = {0,0};   
+  DWORD dummy;
+
+  if(!hStdout)               
+  {
+    hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    GetConsoleScreenBufferInfo(hStdout,&csbi);
+  }
+
+  FillConsoleOutputCharacter(hStdout,
+                             ' ',
+                             csbi.dwSize.X * csbi.dwSize.Y,
+                             startCoords,
+                             &dummy);    
+  gotoxy(0,0);
+}
+
+
+
+int is_from_keyboard(int ch)
+{
+
+    if ( ch>=31 && ch<128) return 1;
+    else return -1;
+
+}
