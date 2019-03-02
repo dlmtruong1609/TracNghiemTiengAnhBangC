@@ -12,6 +12,10 @@ Có thể cài đặt tùy chỉnh bộ đệ cho phù hợp với nhu cầu s�
 
 Lúc thi sẽ có hương dẫn thêm                                                        
 
+## Đề tài
+
+  Xây dựng ứng dụng Trắc nghiệm console chạy bằng C
+  
 ## Lưu ý:
   
   Các bạn nên dời phần hướng dẫn khi thi qua menu, đó là phần khá sai sót trong bài làm của 1 mình các bạn có thẻ dựa vào 
